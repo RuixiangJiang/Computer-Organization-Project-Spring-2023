@@ -1,5 +1,5 @@
 `timescale 1ns / 1ps
-module ALU (
+module ALUwrong (
     input[31:0] ReadData1,
     input[31:0] ReadData2,
     input[31:0] SignExtend, // instruction[15:0] AFTER sign-extension
