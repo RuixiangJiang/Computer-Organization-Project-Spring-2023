@@ -37,6 +37,7 @@ module ALU(
     assign ALUcontrol[0] = (execode[0] | execode[3]) & ALUop[1];
     assign ALUcontrol[1] = (!execode[2]) | (!ALUop[1]);
     assign ALUcontrol[2] = (execode[1] & ALUop[1]) | ALUop[0];
+
     always @(ALUcontrol or Ainput or Binput) begin
         case (ALUcontrol)
             3'b000: arithmeticResult = Ainput & Binput; // and, andi
@@ -47,8 +48,36 @@ module ALU(
             3'b101: arithmeticResult = ~(Ainput | Binput); // nor
             3'b110: arithmeticResult = $signed(Ainput) - $signed(Binput); // sub, subi, beq, bne
             3'b111: arithmeticResult = Ainput - Binput; // subu
-            default: arithmeticResult = 32'b0;
+            default: arithmeticResult = 32'h00000000;
         endcase
     end
+
+    assign sftm = funct[2:0];
+    always @(*) begin
+        if (sftmd) case (sftm[2:0])
+            3'b000: shiftResult = Binput << shamt; // sll
+            3'b010: shiftResult = Binput >> shamt; // srl
+            3'b100: shiftResult = Binput << Ainput; // sllv
+            3'b110: shiftResult = Binput >> Ainput; // srlv
+            3'b011: shiftResult = $signed(Binput) >> shamt; // sra
+            3'b111: shiftResult = $signed(Binput) >> Ainput; // srav
+        endcase
+        else shiftResult = Binput;
+    end
+
+    always @(*) begin
+        // slt, slti, sltu, sltiu
+        if (((ALUcontrol == 3'b111 && execode[3] == 1)) || (I_format == 1 && ALUcontrol[2:1] == 2'b11)) begin
+            if (execode[2:0] == 3'b011) regALUResult = (Ainput - Binput < 0) ? 1 : 0;
+            else regALUResult = ($signed(Ainput) - $signed(Binput) < 0) ? 1 : 0;
+        end
+        // lui
+        else if (ALUcontrol == 3'b101 && I_format == 1) regALUResult[31:0] = {Binput[15:0], 16'b0};
+        // shift
+        else if (sftmd == 1) regALUResult = shiftResult;
+        //other types of operation in ALU
+        else regALUResult = arithmeticResult[31:0];
+    end
+    assign Zero = (arithmeticResult == 32'h00000000) ? 1'b1 : 1'b0;
 
 endmodule
