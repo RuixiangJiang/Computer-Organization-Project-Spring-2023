@@ -3,14 +3,14 @@ module executs32(
     input[31:0] Read_data_1,
     input[31:0] Read_data_2,
     input[31:0] Sign_extend, // instruction[15:0] AFTER sign-extension
-    input[5:0] Function_opcode, // instruction[31:26]
-    input[5:0] Exe_opcode, // instruction[5:0]
+    input[5:0] Function_opcode, // instruction[5:0]
+    input[5:0] Exe_opcode,
     input[1:0] ALUOp, // ALUOp = {if R-type, if branch}
     input[4:0] Shamt, // instruction[10:6]
     input Sftmd, // Sftmd = if it is a shift instruction
     input ALUSrc, // ALUSrc = if 2nd operand is an immediate
     input I_format, // I_format = if it is an I-Type instruction except beq, bne, lw, sw
-    input Jr; // Jr = if it is an Jr instruction
+    input Jr, // Jr = if it is an Jr instruction
     output Zero, // if the ALU_Result is zero
     output[31:0] ALU_Result, // the ALU calculation result
     output[31:0] Addr_Result, // the calculated instruction address
@@ -57,8 +57,8 @@ module executs32(
             3'b010: shiftResult = Binput >> Shamt; // srl
             3'b100: shiftResult = Binput << Ainput; // sllv
             3'b110: shiftResult = Binput >> Ainput; // srlv
-            3'b011: shiftResult = $signed(Binput) >> Shamt; // sra
-            3'b111: shiftResult = $signed(Binput) >> Ainput; // srav
+            3'b011: shiftResult = $signed(Binput) >>> Shamt; // sra
+            3'b111: shiftResult = $signed(Binput) >>> Ainput; // srav
             default: shiftResult = Binput;
         endcase
         else shiftResult = Binput;
@@ -67,8 +67,8 @@ module executs32(
     always @(*) begin
         // slt, slti, sltu, sltiu
         if (((ALUcontrol == 3'b111 && execode[3] == 1)) || (I_format == 1 && ALUcontrol[2:1] == 2'b11)) begin
-            if (execode[2:0] == 3'b011) regALU_Result = (Ainput < Binput < 0);
-            else regALU_Result = ($signed(Ainput) < $signed(Binput) < 0);
+            if (execode[2:0] == 3'b011) regALU_Result = (Ainput < Binput);
+            else regALU_Result = ($signed(Ainput) < $signed(Binput));
         end
         // lui
         else if (ALUcontrol == 3'b101 && I_format == 1) regALU_Result[31:0] = {Binput[15:0], 16'b0};
