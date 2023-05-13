@@ -12,7 +12,7 @@ module Ifetc32(
     input Zero, // if the ALUresult is zero
     input clock,
     input reset,
-    output[31:0] link_addr // (pc + 4) to Decoder which is used by jal instruction
+    output reg [31:0] link_addr // (pc + 4) to Decoder which is used by jal instruction
 );
     reg[31:0] PC, nextPC;
     reg[31:0] jalPC;
@@ -20,23 +20,23 @@ module Ifetc32(
     
     always @(*) begin
         // beq, bne
-        if ((Branch == 1 && Zero == 1) || (nBranch == 1 && Zero == 0)) nextPC = Addr_result << 2;
+        if ((Branch && Zero) || (nBranch && ~Zero)) nextPC = Addr_result << 2;
         // jr
-        else if (Jr == 1) nextPC = Read_data_1 << 2;
+        else if (Jr) nextPC = Read_data_1 << 2;
         // other
         else nextPC = PC + 4;
     end
 
     always @(negedge clock) begin
-        if (reset == 1) PC <= 0;
+        if (reset) PC <= 0;
         else begin
-            if (Jmp == 1 || Jal == 1) PC <= {PC[31:28], Instruction[25:0], 2'b00};
+            if (Jmp || Jal) PC <= {4'b0000, Instruction[25:0], 2'b00};
             else PC <= nextPC;
         end
     end
 
-    always @(posedge Jmp, posedge jal) begin
-        if (Jmp == 1 || Jal == 1) link_addr <= (PC + 4) >> 2;
+    always @(posedge Jmp, posedge Jal) begin
+        if (Jmp || Jal) link_addr <= (PC + 4) >> 2;
     end
 
 endmodule
