@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 module Ifetc32(
     output[31:0] Instruction, // the instruction fetched from this module to Decoder and Controller
-    output[31:0] Branch_base_addr, // (pc + 4) to ALU which is used by Branch type instruction
+    output[31:0] branch_base_addr, // (pc + 4) to ALU which is used by Branch type instruction
     input[31:0] Addr_result, // the calculated address from ALU
     input[31:0] Read_data_1, // the address of instruction used by Jr instruction
     input Branch, // current instruction is beq
@@ -15,7 +15,7 @@ module Ifetc32(
     output reg [31:0] link_addr // (pc + 4) to Decoder which is used by Jal instruction
 );
     reg[31:0] PC, nextPC;
-    assign Branch_base_addr = PC + 4;
+    assign branch_base_addr = PC + 4;
 
     prgrom instmem(
         .clka(clock), // input wire clka
@@ -25,9 +25,9 @@ module Ifetc32(
 
     always @(*) begin
         // beq, bne
-        if ((Branch && Zero) || (nBranch && ~Zero)) nextPC = Addr_result << 2;
+        if ((Branch && Zero) || (nBranch && ~Zero)) nextPC = Addr_result;
         // Jr
-        else if (Jr) nextPC = Read_data_1 << 2;
+        else if (Jr) nextPC = Read_data_1;
         // other
         else nextPC = PC + 4;
     end
@@ -41,7 +41,7 @@ module Ifetc32(
     end
 
     always @(posedge Jmp, posedge Jal) begin
-        if (Jmp || Jal) link_addr <= (PC + 4) >> 2;
+        if (Jmp || Jal) link_addr <= (PC + 4);
     end
 
 endmodule
