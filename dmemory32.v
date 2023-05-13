@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-module Dmemory(readData, address, writeData, memWrite, clock);
+module dmemory32(clock,memWrite, address, writeData, readData);
 input wire clock;
 input wire memWrite;
 input wire [31:0] address;
@@ -18,4 +18,3 @@ RAM ram(
     );
 
 endmodule
-
