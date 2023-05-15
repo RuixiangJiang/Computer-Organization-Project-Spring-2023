@@ -1,11 +1,11 @@
 `timescale 1ns / 1ps
 
 module CPU_TOP(
-    input clock,
-    input rst,
+    input clock, // clk from fpga
+    input rst, // rst from fpga
     input[15:0] Switches,
     output[15:0] Lights
-    );
+);
     wire cpu_clk;
     wire uart_clk;
     clk_wiz_0 clk_instance(
