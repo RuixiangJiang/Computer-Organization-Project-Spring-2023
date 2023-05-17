@@ -4,7 +4,7 @@ module executs32(
     input[31:0] Read_data_2,
     input[31:0] Sign_extend, // instruction[15:0] AFTER sign-extension
     input[5:0] Function_opcode, // instruction[5:0]
-    input[5:0] Exe_opcode,
+    input[5:0] Exe_opcode, // instruction[31:26]
     input[1:0] ALUOp, // ALUOp = {if R-type, if branch}
     input[4:0] Shamt, // instruction[10:6]
     input Sftmd, // Sftmd = if it is a shift instruction
