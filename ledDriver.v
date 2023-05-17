@@ -8,7 +8,7 @@ module ledDriver(
     input[1:0] ledaddr,
     input[15:0] ledinputdata,
     output reg[15:0] ledout
-)
+);
     always @(posedge ledclk or posedge ledrst) begin
         if (ledrst) ledout <= 24'h00000000;
         else if (ledcs && ledwrite) begin
