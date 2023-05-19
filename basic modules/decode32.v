@@ -24,7 +24,7 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
     wire[4:0] rd = Instruction[15:11];
     wire[4:0] writeReg = (Jal)? 5'b11111 : (RegDst)? rd : rt;
 
-    wire is_addi = (Instruction[31:26] == 6'b001000) ? 1 : 0;
+    // wire is_addi = (Instruction[31:26] == 6'b001000) ? 1 : 0;
     wire is_addiu = (Instruction[31:26] == 6'b001001) ? 1 : 0;
     wire is_sltiu = (Instruction[31:26] == 6'b001011) ? 1 : 0;
     wire is_andi = (Instruction[31:26] == 6'b001100) ? 1 : 0;
@@ -56,6 +56,5 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
 
     assign read_data_1 = registers[rs];
     assign read_data_2 = registers[rt];
-//    assign Sign_extend = (is_addi || is_addiu || is_sltiu || is_andi || is_ori || is_xori) ? {16'b0, Instruction[15:0]} : {{16{Instruction[15]}}, Instruction[15:0]};
-    assign Sign_extend = 32'd15;
+    assign Sign_extend = (is_addiu || is_sltiu || is_andi || is_ori || is_xori) ? {16'b0, Instruction[15:0]} : {{16{Instruction[15]}}, Instruction[15:0]};
 endmodule

@@ -40,8 +40,7 @@ module executs32(
         case (ALUcontrol)
             3'b000: arithmeticResult = Ainput & Binput; // and, andi
             3'b001: arithmeticResult = Ainput | Binput; // or, ori
-            // 3'b010: arithmeticResult = $signed(Ainput) + $signed(Binput); // add, addi
-            3'b010: arithmeticResult = Sign_extend[31:0]; // add, addi
+            3'b010: arithmeticResult = $signed(Ainput) + $signed(Binput); // add, addi
             3'b011: arithmeticResult = Ainput + Binput; // addu, addiu
             3'b100: arithmeticResult = Ainput ^ Binput; // xor
             3'b101: arithmeticResult = ~(Ainput | Binput); // nor

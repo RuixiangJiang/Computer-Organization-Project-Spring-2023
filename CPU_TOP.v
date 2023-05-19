@@ -30,7 +30,7 @@ module CPU_TOP(
     wire[31:0] mem_data;
     wire[31:0] alu_result;
     wire RegWrite,MemtoReg,RegDst;
-    wire sign_extend;
+    wire[31:0] sign_extend;
 
     wire[5:0] opcode;
     assign opcode = instruction[31:26];
