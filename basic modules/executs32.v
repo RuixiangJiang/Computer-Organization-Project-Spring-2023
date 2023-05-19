@@ -4,7 +4,7 @@ module executs32(
     input[31:0] Read_data_2,
     input[31:0] Sign_extend, // instruction[15:0] AFTER sign-extension
     input[5:0] Function_opcode, // instruction[5:0]
-    input[5:0] Exe_opcode, // instruction[31:26]
+    input[5:0] Exe_opcode,
     input[1:0] ALUOp, // ALUOp = {if R-type, if branch}
     input[4:0] Shamt, // instruction[10:6]
     input Sftmd, // Sftmd = if it is a shift instruction
@@ -12,7 +12,7 @@ module executs32(
     input I_format, // I_format = if it is an I-Type instruction except beq, bne, lw, sw
     input Jr, // Jr = if it is an Jr instruction
     output Zero, // if the ALU_Result is zero
-    output[31:0] ALU_Result, // the ALU calculation result
+    output reg[31:0] regALU_Result, // the ALU calculation result
     output[31:0] Addr_Result, // the calculated instruction address
     input[31:0] PC_plus_4 // program counter AFTER adding 4
 );
@@ -22,13 +22,13 @@ module executs32(
     wire[2:0] sftm; // identify the types of shift instruction, equals to Exe_opcode[2:0]
     reg[31:0] shiftResult; // the result of shift operation
     reg[31:0] arithmeticResult; // the result of arithmetic or logic calculation
-    reg[31:0] regALU_Result; // reg of the ALU calculation result
+    // reg[31:0] regALU_Result; // reg of the ALU calculation result
     wire[32:0] AddrBranch; // the calculated address of the instruction, Addr_Result is AddrBranch[31:0]
 
     assign Ainput = Read_data_1;
     assign Binput = (ALUSrc == 0) ? Read_data_2 : Sign_extend[31:0];
 
-    assign ALU_Result = regALU_Result;
+    // assign ALU_Result = regALU_Result;
     assign Addr_Result = (Sign_extend << 2) + PC_plus_4;
 
     assign execode = (I_format == 0) ? Function_opcode : {3'b000, Exe_opcode[2:0]};
@@ -40,7 +40,8 @@ module executs32(
         case (ALUcontrol)
             3'b000: arithmeticResult = Ainput & Binput; // and, andi
             3'b001: arithmeticResult = Ainput | Binput; // or, ori
-            3'b010: arithmeticResult = $signed(Ainput) + $signed(Binput); // add, addi
+            // 3'b010: arithmeticResult = $signed(Ainput) + $signed(Binput); // add, addi
+            3'b010: arithmeticResult = Sign_extend[31:0]; // add, addi
             3'b011: arithmeticResult = Ainput + Binput; // addu, addiu
             3'b100: arithmeticResult = Ainput ^ Binput; // xor
             3'b101: arithmeticResult = ~(Ainput | Binput); // nor
