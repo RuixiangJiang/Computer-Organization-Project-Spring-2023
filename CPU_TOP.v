@@ -74,6 +74,7 @@ module CPU_TOP(
         .Branch(Branch),
         .nBranch(nBranch),
         .Jmp(Jmp),
+        .Jal(Jal),
         .Jr(Jr),
         .Zero(Zero),
         .clock(cpu_clk),
@@ -97,7 +98,10 @@ module CPU_TOP(
         .RegWrite(RegWrite),
         .MemtoReg(MemtoReg),
         .RegDst(RegDst),
-        .Sign_extend(sign_extend)
+        .Sign_extend(sign_extend),
+        .clock(cpu_clk),
+        .reset(rst),
+        .opcplus4(PC_plus_4)
     );
     
     
@@ -162,8 +166,8 @@ module CPU_TOP(
     
     MemOrIO morio_instance(
         .mRead(memRead),
-        .mWrite(1'b1),//memWrite),
-        .ioRead(1'b1),//ioRead),
+        .mWrite(memWrite),//memWrite),
+        .ioRead(ioRead),//ioRead),
         .ioWrite(ioWrite),
         .addr_in(addr_result),
         .addr_out(addr_out),
