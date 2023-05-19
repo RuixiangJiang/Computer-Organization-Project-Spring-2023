@@ -140,6 +140,10 @@ module CPU_TOP(
         .Shamt(shamt),
         .Sftmd(Sftmd),
         .ALUSrc(ALUSrc),
+        .I_format(I_format),
+        .Jr(Jr),
+        .Zero(Zero),
+        .ALU_Result(alu_result),
         .Addr_Result(addr_result),
         .PC_plus_4(PC_plus_4)
     );
@@ -158,15 +162,15 @@ module CPU_TOP(
     
     MemOrIO morio_instance(
         .mRead(memRead),
-        .mWrite(memWrite),
-        .ioRead(ioRead),
+        .mWrite(1'b1),//memWrite),
+        .ioRead(1'b1),//ioRead),
         .ioWrite(ioWrite),
         .addr_in(addr_result),
         .addr_out(addr_out),
         .m_rdata(readData),
         .io_rdata(io_rdata),
         .r_wdata(mem_data),
-        .r_rdata(read_data_2),//?
+        .r_rdata(read_data_2),
         .write_data(writeData),
         .SwitchCtrl(SwitchCtrl),
         .LEDCtrl(LEDCtrl)
@@ -176,10 +180,10 @@ module CPU_TOP(
     Switch switch(
         .switclk(clock),
         .switrst(rst),
-        .switchcs(SwitchCtrl),
-        .switchread(ioRead),
+        .switcs(SwitchCtrl),
+        .switread(ioRead),
         .switch_wdata(io_rdata),
-        .switch_rdata(ioread_data),
+        .switch_rdata(Switches),
         .switaddr(addr_out[1:0])
     );    
 
@@ -187,10 +191,11 @@ module CPU_TOP(
     ledDriver led(
         .ledclk(clock),
         .ledrst(rst),
-        .ledwrite(ioWrite),
-        .ledcs(LEDCtrl),
+        .ledwrite(1'b1),
+        .ledcs(1'b1),
         .ledaddr(addr_out[1:0]),
         .ledinputdata(writeData[15:0]),
+        // .ledinputdata(16'b0000000000000100),
         .ledout(Lights)
     );
     
