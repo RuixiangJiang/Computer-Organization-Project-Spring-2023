@@ -41,7 +41,6 @@ module CPU_TOP(
     wire[1:0] ALUop;
     wire[21:0] alu_resultHigh;
     assign alu_resultHigh = alu_result[31:10];
-    wire MemorIOtoReg;
     wire memRead,memWrite,ioRead,ioWrite;
 
 
@@ -115,7 +114,7 @@ module CPU_TOP(
         .Jr(Jr),
         .RegDST(RegDst),
         .ALUSrc(ALUSrc),
-        .MemorIOtoReg(MemorIOtoReg),
+        .MemorIOtoReg(MemtoReg),
         .RegWrite(RegWrite),
         .Branch(Branch),
         .nBranch(nBranch),
@@ -167,7 +166,7 @@ module CPU_TOP(
     MemOrIO morio_instance(
         .mRead(memRead),
         .mWrite(memWrite),//memWrite
-        .ioRead(ioRead),//ioRead)
+        .ioRead(ioRead),//ioRead
         .ioWrite(ioWrite),
         .addr_in(addr_result),
         .addr_out(addr_out),
