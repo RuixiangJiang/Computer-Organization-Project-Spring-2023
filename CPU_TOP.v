@@ -69,12 +69,12 @@ module CPU_TOP(
     wire[31:0] upg_dat_o; // data to rom or Dmemory
     wire spg_bufg;
     BUFG U1(.I(start_pg), .O(spg_bufg)); // de-twitter
-    reg upg_rst; // generate uart rst signal
+    reg upg_rst = 1; // generate uart rst signal
     always @(posedge clock) begin
         if (spg_bufg) upg_rst = 0;
         if (rst) upg_rst = 1;
     end
-    wire not_uart_rst = rst | !upg_rst;
+    wire not_uart_rst = rst | (!upg_rst);
     // CPU works on normal/uart mode when kickOff = 1/0
     uart_bmpg_0 uart  (.upg_adr_o(upg_adr_o),
            .upg_clk_i(upgclk),
@@ -144,7 +144,7 @@ module CPU_TOP(
         .RegDst(RegDst),
         .Sign_extend(sign_extend),
         .clock(cpu_clk),
-        .reset(rst),
+        .reset(not_uart_rst),
         .opcplus4(PC_plus_4)
     );
 
@@ -232,7 +232,7 @@ module CPU_TOP(
 
 
     Switch switch(
-        .switclk(clock),
+        .switclk(cpu_clk),
         .switrst(rst),
         .switcs(SwitchCtrl),
         .switread(ioRead),
@@ -242,8 +242,8 @@ module CPU_TOP(
 
 
     ledDriver led(
-        .ledclk(clock),
-        .ledrst(rst),
+        .ledclk(cpu_clk),
+        .ledrst(not_uart_rst),
         .ledwrite(ioWrite),
         .ledcs(LEDCtrl),
         .ledaddr(addr_out[1:0]),
