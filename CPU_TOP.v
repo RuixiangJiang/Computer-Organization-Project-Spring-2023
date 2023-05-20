@@ -221,6 +221,7 @@ module CPU_TOP(
         .SwitchCtrl(SwitchCtrl),
         .LEDCtrl(LEDCtrl),
         //.UartCtrl(UartCtrl)
+        // in memorio: assign UartCtrl = (ioRead == 1'b1 && addr_in[7:4] == 4'h9) ? 1'b1 : 1'b0;
     );
 
     wire[15:0] switch_wdata;
