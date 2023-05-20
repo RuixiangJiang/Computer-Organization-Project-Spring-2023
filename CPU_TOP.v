@@ -167,8 +167,8 @@ module CPU_TOP(
     
     MemOrIO morio_instance(
         .mRead(memRead),
-        .mWrite(1'b1),//memWrite),
-        .ioRead(1'b1),//ioRead),
+        .mWrite(memWrite),//memWrite
+        .ioRead(ioRead),//ioRead)
         .ioWrite(ioWrite),
         .addr_in(addr_result),
         .addr_out(addr_out),
