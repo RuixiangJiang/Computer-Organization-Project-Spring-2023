@@ -169,7 +169,7 @@ module CPU_TOP(
         .mRead(memRead),
         .mWrite(memWrite),//memWrite
         .ioRead(ioRead),//ioRead)
-        .ioWrite(ioWrite),
+        .ioWrite(ioWrite),//ioWrite
         .addr_in(addr_result),
         .addr_out(addr_out),
         .m_rdata(readData),
@@ -188,16 +188,15 @@ module CPU_TOP(
         .switcs(SwitchCtrl),
         .switread(ioRead),
         .switch_wdata(io_rdata),
-        .switch_rdata(Switches),
-        .switaddr(addr_out[1:0])
+        .switch_rdata(Switches)
     );    
 
 
     ledDriver led(
         .ledclk(clock),
         .ledrst(rst),
-        .ledwrite(1'b1),
-        .ledcs(1'b1),
+        .ledwrite(ioWrite),//ioWrite
+        .ledcs(LEDCtrl),//LEDCtrl
         .ledaddr(addr_out[1:0]),
         .ledinputdata(writeData[15:0]),
         // .ledinputdata(16'b0000000000000100),
