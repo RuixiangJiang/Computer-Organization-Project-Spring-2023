@@ -5,13 +5,21 @@ module CPU_TOP(
     input rst,
     input[15:0] Switches,
     output[15:0] Lights,
-    input start_pg,
+    input start_pg_button,
     input rx,
     output tx
 );
 
     //clk
     wire cpu_clk;
+    wire start_pg;
+
+    buttonDriver bd(
+        .clk_i(cpu_clk),
+        .rst_n_i(rst),
+        .key_i(start_pg_button),
+        .poweron(start_pg)
+    );
 
     wire[31:0] instruction;
 
