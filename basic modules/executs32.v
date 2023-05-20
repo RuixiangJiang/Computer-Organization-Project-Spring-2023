@@ -36,7 +36,7 @@ module executs32(
     assign ALUcontrol[1] = (!execode[2]) | (!ALUOp[1]);
     assign ALUcontrol[2] = (execode[1] & ALUOp[1]) | ALUOp[0];
 
-    always @(ALUcontrol or Ainput or Binput) begin
+    always @(*) begin
         case (ALUcontrol)
             3'b000: arithmeticResult = Ainput & Binput; // and, andi
             3'b001: arithmeticResult = Ainput | Binput; // or, ori
@@ -66,7 +66,8 @@ module executs32(
 
     always @(*) begin
         // slt, slti, sltu, sltiu
-        if (((ALUcontrol == 3'b111 && execode[3] == 1)) || (I_format == 1 && ALUcontrol[2:1] == 2'b11)) regALU_Result = ($signed(Ainput) < $signed(Binput));
+        if (((ALUcontrol == 3'b111 && execode[3] == 1)) || (I_format == 1 && ALUcontrol[2:1] == 2'b11)) 
+            regALU_Result = ($signed(Ainput) < $signed(Binput));
         // lui
         else if (ALUcontrol == 3'b101 && I_format == 1) regALU_Result[31:0] = {Binput[15:0], 16'b0};
         // shift
