@@ -4,25 +4,27 @@ module CPU_TOP(
     input clock,
     input rst,
     input[15:0] Switches,
-    output[15:0] Lights
-    );
+    output[15:0] Lights,
+    input start_pg,
+    input rx,
+    output tx
+);
 
     //clk
     wire cpu_clk;
-    wire uart_clk;
-    
+
     wire[31:0] instruction;
 
     wire[31:0] branch_base_addr;
     wire[31:0] addr_result;
-    wire[31:0] addr_out;  
-    
+    wire[31:0] addr_out;
+
     wire[31:0] read_data_1;
     wire[31:0] read_data_2;
-    
+
     wire Branch,nBranch,Jmp,Jal,Jr,Zero;
 
-    
+
     wire[15:0] io_rdata;
     wire[15:0] io_wdata;
 
@@ -46,7 +48,7 @@ module CPU_TOP(
 
     wire[5:0] shamt;
     assign shamt = instruction[10:6];
-    
+
     wire[31:0] PC_plus_4;
 
     wire[31:0] writeData;
@@ -54,17 +56,59 @@ module CPU_TOP(
 
     wire SwitchCtrl;
     wire LEDCtrl;
+    wire UartCtrl;
 
+
+    // Uart
+    wire[15:0] uartData;
+    wire upgclk;
+    wire upgclk_o;
+    wire upg_wen_o;
+    wire upg_done_o; // iFpgaUartFromPC finish
+    wire[14:0] upg_adr_o; // data to which memory unit of rom/dmemory
+    wire[31:0] upg_dat_o; // data to rom or Dmemory
+    wire spg_bufg;
+    BUFG U1(.I(start_pg), .O(spg_bufg)); // de-twitter
+    reg upg_rst; // generate uart rst signal
+    always @(posedge clock) begin
+        if (spg_bufg) upg_rst = 0;
+        if (rst) upg_rst = 1;
+    end
+    wire not_uart_rst = rst | !upg_rst;
+    // CPU works on normal/uart mode when kickOff = 1/0
+    uart_bmpg_0 uart  (.upg_adr_o(upg_adr_o),
+           .upg_clk_i(upgclk),
+           .upg_clk_o(upgclk_o),
+           .upg_dat_o(upg_dat_o),
+           .upg_done_o(upg_done_o),
+           .upg_rst_i(upg_rst),
+           .upg_rx_i(rx),
+           .upg_tx_o(tx),
+           .upg_wen_o(upg_wen_o));
 
     clk_wiz_0 clk_instance(
         .clk_in1(clock),
         .clk_out1(cpu_clk),
-        .clk_out2(uart_clk)
+        .clk_out2(upgclk)
     );
-    
 
- 
-    //Instruction Fetch   
+
+    wire[31:0] PC;
+    programrom rom(
+        .rom_clk_i(cpu_clk),
+        .rom_adr_i(PC[15:2]),
+        .Instruction_o(instruction),
+        .upg_rst_i(upg_rst),
+        .upg_clk_i(upgclk_o),
+        .upg_wen_i((!upg_adr_o[14] & upg_wen_o)?1'b1:1'b0),
+        .upg_adr_i(upg_adr_o[13:0]),
+        .upg_dat_i(upg_dat_o),
+        .upg_done_i(upg_done_o)
+    );
+
+
+
+    //Instruction Fetch
     Ifetc32 if_instance(
         .Instruction(instruction),
         .branch_base_addr(branch_base_addr),
@@ -77,15 +121,16 @@ module CPU_TOP(
         .Jr(Jr),
         .Zero(Zero),
         .clock(cpu_clk),
-        .reset(rst),
-        .link_addr(PC_plus_4)
+        .reset(not_uart_rst),
+        .link_addr(PC_plus_4),
+        .PC(PC)
     );
-    
-    
 
-    
-    
-    
+
+
+
+
+
     //CPU Decoder
     decode32 decode_instance(
         .read_data_1(read_data_1),
@@ -102,11 +147,11 @@ module CPU_TOP(
         .reset(rst),
         .opcplus4(PC_plus_4)
     );
-    
-    
 
-    
-    
+
+
+
+
     //CPU Controller
     control32 control_instance(
         .Opcode(opcode),
@@ -129,9 +174,9 @@ module CPU_TOP(
         .IORead(ioRead),
         .IOWrite(ioWrite)
     );
-    
-    
-    
+
+
+
     //CPU ALU
     executs32 alu_instance(
         .Read_data_1(read_data_1),
@@ -150,19 +195,25 @@ module CPU_TOP(
         .Addr_Result(addr_result),
         .PC_plus_4(PC_plus_4)
     );
-    
-    
-    
+
+
+
     dmemory32 dm_instance(
-        .clock(cpu_clk),
-        .memWrite(memWrite),
-        .address(addr_out),
-        .writeData(writeData),
-        .readData(readData)
+        .ram_clk_i(cpu_clk),
+        .ram_wen_i(memWrite),
+        .ram_adr_i(addr_out[15:2]),
+        .ram_dat_i(writeData),
+        .ram_dat_o(readData),
+        .upg_rst_i(upg_rst),
+        .upg_clk_i(upgclk_o),
+        .upg_wen_i((!upg_adr_o[14] & upg_wen_o)?1'b1:1'b0),
+        .upg_adr_i(upg_adr_o[13:0]),
+        .upg_dat_i(upg_dat_o),
+        .upg_done_i(upg_done_o)
     );
-    
-    
-    
+
+
+
     MemOrIO morio_instance(
         .mRead(memRead),
         .mWrite(memWrite),//memWrite
@@ -187,7 +238,7 @@ module CPU_TOP(
         .switread(ioRead),
         .switch_wdata(io_rdata),
         .switch_rdata(Switches)
-    );    
+    );
 
 
     ledDriver led(
@@ -200,6 +251,6 @@ module CPU_TOP(
         // .ledinputdata(16'b0000000000000100),
         .ledout(Lights)
     );
-    
+
 
 endmodule

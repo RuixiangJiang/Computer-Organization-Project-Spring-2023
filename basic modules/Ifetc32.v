@@ -12,16 +12,17 @@ module Ifetc32(
     input Zero, // if the ALUresult is Zero
     input clock,
     input reset,
-    output reg [31:0] link_addr // (pc + 4) to Decoder which is used by Jal instruction
+    output reg [31:0] link_addr, // (pc + 4) to Decoder which is used by Jal instruction
+    output reg [31:0] PC
 );
-    reg[31:0] PC, nextPC;
+    reg[31:0] nextPC;
     assign branch_base_addr = PC + 4;
 
-    prgrom instmem(
-        .clka(clock), // input wire clka
-        .addra(PC[15:2]), // input wire [13:0] addra
-        .douta(Instruction) // output wire [31:0] douta
-    );
+    // prgrom instmem(
+    //     .clka(clock), // input wire clka
+    //     .addra(PC[15:2]), // input wire [13:0] addra
+    //     .douta(Instruction) // output wire [31:0] douta
+    // );
 
     always @(*) begin
         // beq, bne
@@ -32,16 +33,15 @@ module Ifetc32(
         else nextPC = PC + 4;
     end
 
-    always @(negedge clock) begin
+    always @(negedge clock or posedge reset) begin
         if (reset) PC <= 0;
         else begin
-            if (Jmp || Jal) PC <= {PC[31:28], Instruction[25:0], 2'b00};
+            if (Jmp || Jal) begin
+                link_addr <= nextPC;
+                PC <= {PC[31:28], Instruction[25:0], 2'b00};
+            end
             else PC <= nextPC;
         end
-    end
-
-    always @(posedge Jmp, posedge Jal) begin
-        if (Jmp || Jal) link_addr <= (PC + 4);
     end
 
 endmodule
