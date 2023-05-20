@@ -75,16 +75,15 @@
                 -   Segment Driver
                     The segment driver is responsible for controlling the segments or tubes used to display numbers or alphanumeric characters. It takes input signals, such as digital data representing the number or character to be displayed, and generates the appropriate signals to activate the specific segments required to form the desired pattern.
     
-                    By controlling the activation and deactivation of the segments, the seg driver module enables the EGO1 board to display numbers or characters on the 8-segment display. It can be programmed or configured to update the display in real-time, showing dynamic information, or to show static values based on the input provided.
+                    By controlling the activation and deactivation of the segments, the seg driver module enables the EGO1 board to display numbers or characters on the 7-segment display. It can be programmed or configured to update the display in real-time, showing dynamic information, or to show static values based on the input provided.
                     
-                    Special attention should be paid to the value of the clock cycle for the 8-segment display on the EGO1 development board.
+                    Special attention should be paid to the value of the clock cycle for the 7-segment display on the EGO1 development board.
                     (add pictures)
-                    
         ## Test instructions
         -   Test for vivado
             |   Method   | Type |              Detail              |  Result  |
             | :--------: | :--: | :------------------------------: | :------: |
             | Simulation | Unit | Test the $5$ basic modules on OJ | Accepted |
         -   Test for mips
-    
-        ## Issues and summary
+        
+    ## Issues and summary
