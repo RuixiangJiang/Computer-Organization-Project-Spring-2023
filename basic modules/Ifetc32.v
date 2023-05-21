@@ -26,9 +26,9 @@ module Ifetc32(
 
     always @(*) begin
         // beq, bne
-        if ((Branch && Zero) || (nBranch && ~Zero)) nextPC = Addr_result;
+        if ((Branch==1'b1 && Zero==1'b1) || (nBranch==1'b1 && Zero==1'b0)) nextPC = Addr_result;
         // Jr
-        else if (Jr) nextPC = Read_data_1;
+        else if (Jr==1'b1) nextPC = Read_data_1;
         // other
         else nextPC = PC + 4;
     end
@@ -36,7 +36,7 @@ module Ifetc32(
     always @(negedge clock or posedge reset) begin
         if (reset) PC <= 0;
         else begin
-            if (Jmp || Jal) begin
+            if (Jmp==1'b1 || Jal==1'b1) begin
                 link_addr <= nextPC;
                 PC <= {PC[31:28], Instruction[25:0], 2'b00};
             end
