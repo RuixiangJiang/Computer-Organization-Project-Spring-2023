@@ -12,6 +12,14 @@ module CPU_TOP(
 
     //clk
     wire cpu_clk;
+    wire start_pg;
+
+    buttonDriver bd(
+        .clk_i(cpu_clk),
+        .rst_n_i(rst),
+        .key_i(start_pg_button),
+        .poweron(start_pg)
+    );
 
     wire[31:0] instruction;
 
