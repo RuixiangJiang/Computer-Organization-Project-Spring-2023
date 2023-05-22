@@ -234,6 +234,7 @@ module CPU_TOP(
         .switclk(cpu_clk),
         .switrst(rst),
         .switcs(SwitchCtrl),
+        .switchaddr(addr_out[1:0]),
         .switread(ioRead),
         .switch_wdata(io_rdata),
         .switch_rdata(Switches)
