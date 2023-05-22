@@ -264,7 +264,7 @@ module CPU_TOP(
 
     wire[23:0] num_seg = {16'b0,Lights[7:0]};
 
-    SegDriver seg_instance(
+    segDriver seg_instance(
         .clk(clock),
         .rst(rst),
         .enable(LEDCtrl),
