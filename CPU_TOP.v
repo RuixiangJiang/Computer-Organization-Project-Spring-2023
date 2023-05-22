@@ -262,5 +262,17 @@ module CPU_TOP(
         .ledout(Lights)
     );
 
+    wire[23:0] num_seg = {16'b0,Lights[7:0]};
+
+    SegDriver seg_instance(
+        .clk(clock),
+        .rst(rst),
+        .enable(LEDCtrl),
+        .num(num_seg),
+        .seg(seg),
+        .seg1(seg1),
+        .an(an)
+    );
+
 
 endmodule
