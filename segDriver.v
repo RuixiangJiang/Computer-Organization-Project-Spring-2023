@@ -18,7 +18,6 @@ module segDriver(
     reg[7:0] an = 8'b00000001;
     reg[3:0] disp_dat = 0;
     reg[2:0] disp_bit = 0;
-    reg[23:0] count = 0;
     reg[3:0] res1 = 0;
     reg[3:0] res2 = 0;
     reg[3:0] res3 = 0;
