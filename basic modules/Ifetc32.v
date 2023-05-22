@@ -45,7 +45,7 @@ module Ifetc32(
         else begin
             if (Jmp==1'b1 || Jal==1'b1) begin
                 link_addr <= nextPC;
-                PC <= {4'b0000, Instruction[25:0], 2'b00};
+                PC <= {PC[31:28], Instruction[25:0], 2'b00};
             end
             else PC <= nextPC;
         end
