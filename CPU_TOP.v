@@ -8,7 +8,10 @@ module CPU_TOP(
     input start_pg,
     input rx,
     input check_button,
-    output tx
+    output tx,
+    output[7:0] seg,
+    output[7:0] seg1,
+    output[7:0] an
 );
 
     //clk
