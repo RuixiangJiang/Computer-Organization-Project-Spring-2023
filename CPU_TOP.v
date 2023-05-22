@@ -261,7 +261,7 @@ module CPU_TOP(
     );
 
 
-    reg[23:0] segnum = 23'd12345678;
+    reg[23:0] segnum = 23'hABCD;
 
     segDriver seg_inst(
         .clk(cpu_clk),
