@@ -3,7 +3,7 @@ module segDriver(
     input clk,
     input rst,
     input enable,
-    input[31:0] num,
+    input[23:0] num,
     output[7:0] seg,
     output[7:0] seg1,
     output[7:0] an
@@ -35,7 +35,7 @@ module segDriver(
         res5 = 0;
         res6 = 0;
         res7 = 0;
-        for (i = 31; i >= 0; i = i - 1) begin
+        for (i = 23; i >= 0; i = i - 1) begin
             if (res1 >= 4'd5) res1 = res1 + 4'd3;
             if (res2 >= 4'd5) res2 = res2 + 4'd3;
             if (res3 >= 4'd5) res3 = res3 + 4'd3;
