@@ -66,7 +66,7 @@ module executs32(
     always @(*) begin
         // slt, slti, sltu, sltiu
         if (((ALUcontrol == 3'b111 && execode[3] == 1)) || (I_format == 1 && ALUcontrol[2:1] == 2'b11)) 
-            regALU_Result = ($signed(Ainput) < $signed(Binput));
+            regALU_Result[31:0] = (execode[2:0] == 3'b011) ? Ainput < Binput : $signed(Ainput) < $signed(Binput);
         // lui
         else if (ALUcontrol == 3'b101 && I_format == 1) regALU_Result[31:0] = {Binput[15:0], 16'b0};
         // shift
