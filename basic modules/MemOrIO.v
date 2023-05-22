@@ -11,7 +11,7 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
     output[31:0] addr_out; // address to Data-Memory
 
     input[31:0] m_rdata; // data read from Data-Memory
-    input[15:0] io_rdata; // data read from IO,16 bits
+    input[7:0] io_rdata; // data read from IO,16 bits
     output [31:0] r_wdata; // data to Decoder(register file)
 
     input[31:0] r_rdata; // data read from Decoder(register file)
