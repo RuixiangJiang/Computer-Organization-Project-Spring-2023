@@ -13,6 +13,20 @@ module segDriver(
     reg[2:0] disp_bit = 0;
     reg[18:0] divclk_cnt = 0;
     reg divclk = 0;
+    reg[7:0] seg = 0;
+    reg[7:0] seg1 = 0;
+    reg[7:0] an = 8'b00000001;
+    reg[3:0] disp_dat = 0;
+    reg[2:0] disp_bit = 0;
+    reg[23:0] count = 0;
+    reg[3:0] res1 = 0;
+    reg[3:0] res2 = 0;
+    reg[3:0] res3 = 0;
+    reg[3:0] res4 = 0;
+    reg[3:0] res5 = 0;
+    reg[3:0] res6 = 0;
+    reg[3:0] res7 = 0;
+    integer i;
     always @(posedge clk) begin
         res1 = 0;
         res2 = 0;
@@ -129,10 +143,3 @@ module segDriver(
     end
 
 endmodule
-
-/* in CPU TOP:
-    output[7:0] seg,
-    output[7:0] seg1,
-    output[7:0] an
-    segDriver u(...)
-*/
