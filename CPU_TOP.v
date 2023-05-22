@@ -25,7 +25,7 @@ module CPU_TOP(
     wire Branch,nBranch,Jmp,Jal,Jr,Zero;
 
 
-    wire[15:0] io_rdata;
+    wire[7:0] io_rdata;
     wire[15:0] io_wdata;
 
     wire[31:0] mem_data;
