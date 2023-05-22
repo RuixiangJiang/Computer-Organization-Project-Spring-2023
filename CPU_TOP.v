@@ -9,9 +9,9 @@ module CPU_TOP(
     input rx,
     input check_button,
     output tx,
-    output reg[7:0] seg,
-    output reg[7:0] seg1,
-    output reg[7:0] an
+    output[7:0] seg,
+    output[7:0] seg1,
+    output[7:0] an
 );
 
     //clk
@@ -261,7 +261,7 @@ module CPU_TOP(
     );
 
 
-    reg[23:0] segnum = 23'd12345678;
+    reg[23:0] segnum = 23'hABCD;
 
     segDriver seg_inst(
         .clk(cpu_clk),
