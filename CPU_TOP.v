@@ -234,7 +234,6 @@ module CPU_TOP(
         .switclk(cpu_clk),
         .switrst(rst),
         .switcs(SwitchCtrl),
-        .switchaddr(addr_out[1:0]),
         .switread(ioRead),
         .switch_wdata(io_rdata),
         .switch_rdata(Switches)
@@ -247,7 +246,7 @@ module CPU_TOP(
         .ledwrite(ioWrite),
         .ledcs(LEDCtrl),
         .ledaddr(addr_out[1:0]),
-        .ledinputdata(writeData[15:0]),
+        .ledinputdata(writeData[7:0]),
         // .ledinputdata(16'b0000000000000100),
         .ledout(Lights)
     );
