@@ -7,6 +7,7 @@ module CPU_TOP(
     output[15:0] Lights,
     input start_pg,
     input rx,
+    input check_button,
     output tx
 );
 
@@ -239,7 +240,8 @@ module CPU_TOP(
         .switchaddr(addr_out[1:0]),
         .switread(ioRead),
         .switch_wdata(io_rdata),
-        .switch_rdata(Switches)
+        .switch_rdata(Switches),
+        .check_button(check_button)
     );
 
 
