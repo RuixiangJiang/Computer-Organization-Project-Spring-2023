@@ -8,10 +8,7 @@ module CPU_TOP(
     input start_pg,
     input rx,
     input check_button,
-    output tx,
-    output[7:0] seg,
-    output[7:0] seg1,
-    output[7:0] an
+    output tx
 );
 
     //clk
@@ -61,7 +58,6 @@ module CPU_TOP(
     wire SwitchCtrl;
     wire LEDCtrl;
     wire UartCtrl;
-    wire SegCtrl;
 
     // Uart
     wire[15:0] uartData;
@@ -98,17 +94,17 @@ module CPU_TOP(
 
 
     wire[31:0] PC;
-    programrom rom(
-        .rom_clk_i(cpu_clk),
-        .rom_adr_i(PC[15:2]),
-        .Instruction_o(instruction),
-        .upg_rst_i(upg_rst),
-        .upg_clk_i(upgclk_o),
-        .upg_wen_i((!upg_adr_o[14] & upg_wen_o)?1'b1:1'b0),
-        .upg_adr_i(upg_adr_o[13:0]),
-        .upg_dat_i(upg_dat_o),
-        .upg_done_i(upg_done_o)
-    );
+    // programrom rom(
+    //     .rom_clk_i(cpu_clk),
+    //     .rom_adr_i(PC[15:2]),
+    //     .Instruction_o(instruction),
+    //     .upg_rst_i(upg_rst),
+    //     .upg_clk_i(upgclk_o),
+    //     .upg_wen_i((!upg_adr_o[14] & upg_wen_o)?1'b1:1'b0),
+    //     .upg_adr_i(upg_adr_o[13:0]),
+    //     .upg_dat_i(upg_dat_o),
+    //     .upg_done_i(upg_done_o)
+    // );
 
 
 
@@ -127,7 +123,14 @@ module CPU_TOP(
         .clock(cpu_clk),
         .reset(not_uart_rst),
         .link_addr(PC_plus_4),
-        .PC(PC)
+        .PC(PC),
+        .rom_adr_i(PC[15:2]),
+        .upg_rst_i(upg_rst),
+        .upg_clk_i(upgclk_o),
+        .upg_wen_i((!upg_adr_o[14] & upg_wen_o)?1'b1:1'b0),
+        .upg_adr_i(upg_adr_o[13:0]),
+        .upg_dat_i(upg_dat_o),
+        .upg_done_i(upg_done_o)
     );
 
 
@@ -233,8 +236,7 @@ module CPU_TOP(
         .r_rdata(read_data_2),
         .write_data(writeData),
         .SwitchCtrl(SwitchCtrl),
-        .LEDCtrl(LEDCtrl),
-        .SegCtrl(SegCtrl)
+        .LEDCtrl(LEDCtrl)
     );
 
 
@@ -258,19 +260,6 @@ module CPU_TOP(
         .ledaddr(addr_out[1:0]),
         .ledinputdata(writeData[7:0]),
         .ledout(Lights)
-    );
-
-
-    reg[23:0] segnum = 23'hABCD;
-
-    segDriver seg_inst(
-        .clk(cpu_clk),
-        .rst(not_uart_rst),
-        .enable(SegCtrl),
-        .num(segnum),
-        .seg(seg),
-        .seg1(seg1),
-        .an(an)
     );
 
 

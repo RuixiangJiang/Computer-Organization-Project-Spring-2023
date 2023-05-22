@@ -13,7 +13,14 @@ module Ifetc32(
     input clock,
     input reset,
     output reg [31:0] link_addr, // (pc + 4) to Decoder which is used by Jal instruction
-    output reg [31:0] PC
+    output reg [31:0] PC,
+    input[13:0] rom_adr_i, 
+    input upg_rst_i, 
+    input upg_clk_i, 
+    input upg_wen_i, 
+    input[13:0] upg_adr_i, 
+    input[31:0] upg_dat_i, 
+    input upg_done_i
 );
     reg[31:0] nextPC;
     assign branch_base_addr = PC + 4;
@@ -38,10 +45,20 @@ module Ifetc32(
         else begin
             if (Jmp==1'b1 || Jal==1'b1) begin
                 link_addr <= nextPC;
-                PC <= {PC[31:28], Instruction[25:0], 2'b00};
+                PC <= {4'b0000, Instruction[25:0], 2'b00};
             end
             else PC <= nextPC;
         end
     end
+
+    wire no_Uart_mode = upg_rst_i | (~upg_rst_i & upg_done_i);
+    
+    prgrom instmem(
+        .clka(no_Uart_mode? clock: upg_clk_i),
+        .wea(no_Uart_mode? 1'b0: upg_wen_i),
+        .addra(no_Uart_mode? rom_adr_i: upg_adr_i),
+        .dina(no_Uart_mode? 32'h00000000: upg_dat_i),
+        .douta(Instruction) 
+    );
 
 endmodule

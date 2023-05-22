@@ -26,20 +26,20 @@ Jmp, Jal, I_format, Sftmd, ALUOp, Alu_resultHigh, IORead, IOWrite);
     wire lw, sw, beq, bne;
     wire R_format;
 
-    assign R_format = (Opcode == 6'b000000) ? 1 : 0;
-    assign lw = (Opcode == 6'b100011) ? 1 : 0;
-    assign sw = (Opcode == 6'b101011) ? 1 : 0;
-    assign beq = (Opcode == 6'b000100) ? 1 : 0;
-    assign bne = (Opcode == 6'b000101) ? 1 : 0;
-    assign Jmp = (Opcode == 6'b000010) ? 1 : 0;
-    assign Jal = (Opcode == 6'b000011) ? 1 : 0;
-    assign Jr = (R_format && (Function_opcode == 6'b001000)) ? 1 : 0;
+    assign R_format = (Opcode == 6'b000000) ? 1'b1 : 1'b0;
+    assign lw = (Opcode == 6'b100011) ? 1'b1 : 1'b0;
+    assign sw = (Opcode == 6'b101011) ? 1'b1 : 1'b0;
+    assign beq = (Opcode == 6'b000100) ? 1'b1 : 1'b0;
+    assign bne = (Opcode == 6'b000101) ? 1'b1 : 1'b0;
+    assign Jmp = (Opcode == 6'b000010) ? 1'b1 : 1'b0;
+    assign Jal = (Opcode == 6'b000011) ? 1'b1 : 1'b0;
+    assign Jr = (R_format && (Function_opcode == 6'b001000)) ? 1'b1 : 1'b0;
 
     assign Branch = beq;
     assign nBranch = bne;
     assign RegDST = R_format;
     assign MemorIOtoReg = IORead || MemRead;
-    assign RegWrite = (R_format || lw || Jal || I_format) && !(Jr) ; // Write memory or write
+    assign RegWrite = ((R_format || lw || Jal || I_format) && !(Jr)) ? 1'b1:1'b0;
     assign MemWrite = ((sw==1) && (Alu_resultHigh[21:0] != 22'h3FFFFF)) ? 1'b1:1'b0;
     assign MemRead = ((lw==1)&&(Alu_resultHigh[21:0]!=22'h3FFFFF))?1'b1:1'b0;
     assign IORead = ((lw==1)&&(Alu_resultHigh[21:0]==22'h3FFFFF))?1'b1:1'b0;

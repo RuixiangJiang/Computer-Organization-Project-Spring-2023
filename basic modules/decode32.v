@@ -39,17 +39,16 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
           end
         end
         else begin
-        end
-
-        if (RegWrite && writeReg) begin
-            if (Jal) begin
-                registers[writeReg] = opcplus4;
-            end
-            else if (MemtoReg) begin
-                registers[writeReg] = mem_data;
-            end
-            else begin
-                registers[writeReg] = ALU_result;
+            if (RegWrite && writeReg) begin
+                if (Jal) begin
+                    registers[writeReg] <= opcplus4;
+                end
+                else if (MemtoReg) begin
+                    registers[writeReg] <= mem_data;
+                end
+                else begin
+                    registers[writeReg] <= ALU_result;
+                end
             end
         end
     end
