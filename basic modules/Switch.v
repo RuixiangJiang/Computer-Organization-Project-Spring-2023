@@ -6,7 +6,7 @@ module Switch(
     input switcs, // switch chip-select from memorio
     input[1:0] switchaddr,
     input switread, // read-signal
-    output reg[15:0] switch_wdata, // 16 bit data write to CPU
+    output reg[7:0] switch_wdata, // 16 bit data write to CPU
     input[15:0] switch_rdata // 16 bit data read from ego1
 );
     always @ (negedge switclk or posedge switrst) begin
