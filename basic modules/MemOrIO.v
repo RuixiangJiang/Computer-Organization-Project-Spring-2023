@@ -23,7 +23,7 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
     // The data wirte to register file may be from memory or io. // While the data is from io, it should be the lower 16bit of r_wdata. assign r_wdata = 锟斤拷锟斤拷锟斤拷
     // Chip select signal of Led and Switch are all active high;
 
-    assign r_wdata = (mRead == 1)? m_rdata:{{16{io_rdata[15]}},io_rdata}; // TODO
+    assign r_wdata = (mRead == 1)? m_rdata:{{24{io_rdata[15]}},io_rdata}; // TODO
 
     assign SwitchCtrl = ioRead;
     assign LEDCtrl = ioWrite;
