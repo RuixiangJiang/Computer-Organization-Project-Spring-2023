@@ -263,7 +263,7 @@ module CPU_TOP(
 
     reg[31:0] segnum = 32'hABCD;
 
-    segDriver seg(
+    segDriver seg_inst(
         .clk(cpu_clk),
         .rst(not_uart_rst),
         .enable(SegCtrl),
@@ -271,7 +271,7 @@ module CPU_TOP(
         .seg(seg),
         .seg1(seg1),
         .an(an)
-    )
+    );
 
 
 endmodule
