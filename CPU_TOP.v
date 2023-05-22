@@ -211,6 +211,8 @@ module CPU_TOP(
         .upg_done_i(upg_done_o)
     );
 
+    wire[31:0] addr_in;
+    assign addr_in = alu_result;
 
 
     MemOrIO morio_instance(
@@ -218,7 +220,7 @@ module CPU_TOP(
         .mWrite(memWrite),//memWrite
         .ioRead(ioRead),//ioRead
         .ioWrite(ioWrite),
-        .addr_in(addr_result),
+        .addr_in(addr_in),
         .addr_out(addr_out),
         .m_rdata(readData),
         .io_rdata(io_rdata),
