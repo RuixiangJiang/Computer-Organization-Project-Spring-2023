@@ -9,9 +9,9 @@ module CPU_TOP(
     input rx,
     input check_button,
     output tx,
-    output reg[7:0] seg,
-    output reg[7:0] seg1,
-    output reg[7:0] an
+    output[7:0] seg,
+    output[7:0] seg1,
+    output[7:0] an
 );
 
     //clk
