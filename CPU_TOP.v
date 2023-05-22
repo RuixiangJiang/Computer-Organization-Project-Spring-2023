@@ -267,7 +267,7 @@ module CPU_TOP(
     segDriver seg_instance(
         .clk(clock),
         .rst(rst),
-        .enable(LEDCtrl),
+        .enable(1'b1),
         .num(num_seg),
         .seg(seg),
         .seg1(seg1),
