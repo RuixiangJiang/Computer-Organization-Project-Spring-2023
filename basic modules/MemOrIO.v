@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 
-module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rdata, r_wdata, r_rdata, write_data, LEDCtrl, SwitchCtrl);
+module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rdata, r_wdata, r_rdata, write_data, LEDCtrl, SwitchCtrl, SegCtrl);
     input mRead; // read memory, fromController
     input mWrite; // write memory, fromController
     input ioRead; // read IO, from Controller
@@ -16,8 +16,9 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
 
     input[31:0] r_rdata; // data read from Decoder(register file)
     output reg[31:0] write_data; // data to memory or I/O锟斤拷m_wdata, io_wdata锟斤拷output LEDCtrl; // LED Chip Select
-    output  SwitchCtrl; // Switch Chip Select
+    output SwitchCtrl; // Switch Chip Select
     output LEDCtrl;
+    output SegCtrl;
 
     assign addr_out= addr_in;
     // The data wirte to register file may be from memory or io. // While the data is from io, it should be the lower 16bit of r_wdata. assign r_wdata = 锟斤拷锟斤拷锟斤拷
@@ -25,8 +26,9 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
 
     assign r_wdata = (mRead == 1)? m_rdata:{{24{io_rdata[7]}},io_rdata}; // TODO
 
-    assign SwitchCtrl = ioRead;
-    assign LEDCtrl = ioWrite;
+    assign SwitchCtrl = ioRead && addr_in[7:4] == 4'h7;
+    assign LEDCtrl = ioWrite && addr_in[7:4] == 4'h6;
+    assign SegCtrl = ioWrite && addr_in[7:4] == 4'h8;
 
     always @* begin
         if((mWrite==1)||(ioWrite==1))

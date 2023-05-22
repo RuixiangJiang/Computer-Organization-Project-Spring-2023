@@ -8,7 +8,10 @@ module CPU_TOP(
     input start_pg,
     input rx,
     input check_button,
-    output tx
+    output tx,
+    output reg[7:0] seg,
+    output reg[7:0] seg1,
+    output reg[7:0] an
 );
 
     //clk
@@ -58,6 +61,7 @@ module CPU_TOP(
     wire SwitchCtrl;
     wire LEDCtrl;
     wire UartCtrl;
+    wire SegCtrl;
 
     // Uart
     wire[15:0] uartData;
@@ -229,7 +233,8 @@ module CPU_TOP(
         .r_rdata(read_data_2),
         .write_data(writeData),
         .SwitchCtrl(SwitchCtrl),
-        .LEDCtrl(LEDCtrl)
+        .LEDCtrl(LEDCtrl),
+        .SegCtrl(SegCtrl)
     );
 
 
@@ -252,9 +257,21 @@ module CPU_TOP(
         .ledcs(LEDCtrl),
         .ledaddr(addr_out[1:0]),
         .ledinputdata(writeData[7:0]),
-        // .ledinputdata(16'b0000000000000100),
         .ledout(Lights)
     );
+
+
+    reg[31:0] segnum = 32'hABCD;
+
+    segDriver seg(
+        .clk(cpu_clk),
+        .rst(not_uart_rst),
+        .enable(SegCtrl),
+        .num(segnum),
+        .seg(seg),
+        .seg1(seg1),
+        .an(an)
+    )
 
 
 endmodule
