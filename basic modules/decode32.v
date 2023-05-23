@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`include "header.vh"
 
 module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal,
     RegWrite, MemtoReg, RegDst, Sign_extend, clock, reset, opcplus4, 
@@ -39,11 +40,11 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
     wire[4:0] writeReg = (Jal)? 5'b11111 : (RegDst)? rd : rt; // the index of the register to be written
 
     // wire is_addi = (Instruction[31:26] == 6'b001000) ? 1 : 0;
-    wire is_addiu = (Instruction[31:26] == 6'b001001) ? 1 : 0; // judge whether the instruction is addiu
-    wire is_sltiu = (Instruction[31:26] == 6'b001011) ? 1 : 0; // judge whether the instruction is sltiu
-    wire is_andi = (Instruction[31:26] == 6'b001100) ? 1 : 0; // judge whether the instruction is andi
-    wire is_ori = (Instruction[31:26] == 6'b001101) ? 1 : 0; // judge whether the instruction is ori
-    wire is_xori = (Instruction[31:26] == 6'b001110) ? 1 : 0; // judge whether the instruction is xori
+    wire is_addiu = (Instruction[31:26] == `addiu_code) ? 1 : 0; // judge whether the instruction is addiu
+    wire is_sltiu = (Instruction[31:26] == `sltiu_code) ? 1 : 0; // judge whether the instruction is sltiu
+    wire is_andi = (Instruction[31:26] == `andi_code) ? 1 : 0; // judge whether the instruction is andi
+    wire is_ori = (Instruction[31:26] == `ori_code) ? 1 : 0; // judge whether the instruction is ori
+    wire is_xori = (Instruction[31:26] == `xori_code) ? 1 : 0; // judge whether the instruction is xori
 
     integer i;
     always @(posedge clock) begin

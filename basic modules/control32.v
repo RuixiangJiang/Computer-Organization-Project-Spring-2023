@@ -1,4 +1,5 @@
 `timescale 1ns / 1ps
+`include "header.vh"
 
 module control32(Opcode, Function_opcode, Jr, RegDST, 
 ALUSrc, MemorIOtoReg, RegWrite, MemWrite, MemRead, Branch, nBranch, 
@@ -16,7 +17,7 @@ Jmp, Jal, I_format, Sftmd, ALUOp, Alu_resultHigh, IORead, IOWrite);
     output       Jal;            //  1 if the current instruction is jal, 0 otherwise
     output       I_format;      //  1 if the instruction is I-type except for beq, bne, lw and sw; 0 otherwise
     output       Sftmd;         //  1 if the instruction is a shift instruction, 0 otherwise
-    output[1:0]  ALUOp;        // if the instruction is R-type or I_format, ALUOp's higher bit is 1, 0 otherwise; if the instruction is “beq” or “bne“, ALUOp's lower bit is 1, 0 otherwise
+    output[1:0]  ALUOp;        // if the instruction is R-type or I_format, ALUOp's higher bit is 1, 0 otherwise; if the instruction is “beq�? or “bne�?, ALUOp's lower bit is 1, 0 otherwise
     input[21:0] Alu_resultHigh; // From the execution unit Alu_Result[31..10]
     output MemRead; // 1 indicates that the instruction needs to read from the memory
     output MemWrite; // 1 indicates that the instruction needs to write to the memory
@@ -26,14 +27,14 @@ Jmp, Jal, I_format, Sftmd, ALUOp, Alu_resultHigh, IORead, IOWrite);
     wire lw, sw, beq, bne;
     wire R_format;
 
-    assign R_format = (Opcode == 6'b000000) ? 1'b1 : 1'b0; // 6'b000000 is the opcode of R-type instructions
-    assign lw = (Opcode == 6'b100011) ? 1'b1 : 1'b0; // 6'b100011 is the opcode of lw
-    assign sw = (Opcode == 6'b101011) ? 1'b1 : 1'b0; // 6'b101011 is the opcode of sw
-    assign beq = (Opcode == 6'b000100) ? 1'b1 : 1'b0; // 6'b000100 is the opcode of beq
-    assign bne = (Opcode == 6'b000101) ? 1'b1 : 1'b0; // 6'b000101 is the opcode of bne
-    assign Jmp = (Opcode == 6'b000010) ? 1'b1 : 1'b0; // 6'b000010 is the opcode of j
-    assign Jal = (Opcode == 6'b000011) ? 1'b1 : 1'b0; // 6'b000011 is the opcode of jal
-    assign Jr = (R_format && (Function_opcode == 6'b001000)) ? 1'b1 : 1'b0; // 6'b001000 is the function opcode of jr
+    assign R_format = (Opcode == `r_format_code) ? 1'b1 : 1'b0; // 6'b000000 is the opcode of R-type instructions
+    assign lw = (Opcode == `lw_code) ? 1'b1 : 1'b0; // 6'b100011 is the opcode of lw
+    assign sw = (Opcode == `sw_code) ? 1'b1 : 1'b0; // 6'b101011 is the opcode of sw
+    assign beq = (Opcode == `beq_code) ? 1'b1 : 1'b0; // 6'b000100 is the opcode of beq
+    assign bne = (Opcode == `bne_code) ? 1'b1 : 1'b0; // 6'b000101 is the opcode of bne
+    assign Jmp = (Opcode == `j_code) ? 1'b1 : 1'b0; // 6'b000010 is the opcode of j
+    assign Jal = (Opcode == `jal_code) ? 1'b1 : 1'b0; // 6'b000011 is the opcode of jal
+    assign Jr = (R_format && (Function_opcode == `jr_code)) ? 1'b1 : 1'b0; // 6'b001000 is the function opcode of jr
 
     // judge control signals
     assign Branch = beq;
@@ -41,15 +42,15 @@ Jmp, Jal, I_format, Sftmd, ALUOp, Alu_resultHigh, IORead, IOWrite);
     assign RegDST = R_format;
     assign MemorIOtoReg = IORead || MemRead;
     assign RegWrite = ((R_format || lw || Jal || I_format) && !(Jr)) ? 1'b1:1'b0;
-    assign MemWrite = ((sw==1) && (Alu_resultHigh[21:0] != 22'h3FFFFF)) ? 1'b1:1'b0;
-    assign MemRead = ((lw==1)&&(Alu_resultHigh[21:0]!=22'h3FFFFF))?1'b1:1'b0;
-    assign IORead = ((lw==1)&&(Alu_resultHigh[21:0]==22'h3FFFFF))?1'b1:1'b0;
-    assign IOWrite = ((sw==1)&&(Alu_resultHigh[21:0]==22'h3FFFFF))?1'b1:1'b0;
+    assign MemWrite = ((sw==1) && (Alu_resultHigh[21:0] != `alu_high_addr)) ? 1'b1:1'b0;
+    assign MemRead = ((lw==1)&&(Alu_resultHigh[21:0]!=`alu_high_addr))?1'b1:1'b0;
+    assign IORead = ((lw==1)&&(Alu_resultHigh[21:0]==`alu_high_addr))?1'b1:1'b0;
+    assign IOWrite = ((sw==1)&&(Alu_resultHigh[21:0]==`alu_high_addr))?1'b1:1'b0;
     assign ALUSrc = (lw || sw || I_format) ? 1 : 0;
     assign Sftmd = (R_format && ((Function_opcode == 6'b000000) || (Function_opcode == 6'b000010) 
                     || (Function_opcode == 6'b000100) || (Function_opcode == 6'b000110)
                     || (Function_opcode == 6'b000011) || (Function_opcode == 6'b000111))) ? 1 : 0;
-    assign I_format = (Opcode[5:3] == 3'b001) ? 1 : 0;
+    assign I_format = (Opcode[5:3] == `i_format_code) ? 1 : 0;
     assign ALUOp = {(R_format || I_format), (beq || bne)};
 
 endmodule

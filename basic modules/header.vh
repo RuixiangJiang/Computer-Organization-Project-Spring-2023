@@ -1,0 +1,20 @@
+`define r_format_code 6'b000000
+`define i_format_code 3'b001
+`define lw_code 6'b100011
+`define sw_code 6'b101011
+`define beq_code 6'b000100
+`define bne_code 6'b000101
+`define j_code 6'b000010
+`define jal_code 6'b000011
+`define jr_code 6'b001000
+`define addiu_code 6'b001001
+`define sltiu_code 6'b001011
+`define andi_code 6'b001100
+`define ori_code 6'b001101
+`define xori_code 6'b001110
+`define alu_high_addr 22'h3FFFFF
+
+`define LEFT_LED_ADDRESS 0xFFFFFC62
+`define RIGHT_LED_ADDRESS 0xFFFFFC60
+`define LEFT_SWITCH_ADDRESS 0xFFFFFC72
+`define RIGHT_SWITCH_ADDRESS 0xFFFFFC70
