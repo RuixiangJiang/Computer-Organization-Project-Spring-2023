@@ -20,6 +20,7 @@ start:
         lw $t0, 0xC73($26)
         beq $t0, $s0, caseloop
         sw $zero, 0xC60($26)
+        sw $zero, 0xC62($26)
 
         beq $t1, $s0, case0
 		beq $t1, $s1, case1
@@ -35,7 +36,7 @@ start:
         jal sleep
         case0loop:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case0loop
         ori $t1, $zero, 0
@@ -54,7 +55,7 @@ start:
             ori $t4, $zero, 0
             case0flickerloop1:
                 ori $t3, $zero, 0xFF
-                sw $t3, 0xC60($26)
+                sw $t3, 0xC62($26)
                 addi $t4, $t4, 1
                 bne $t4, $27, case0flickerloop1
             ori $t5, $zero, 0
@@ -63,7 +64,7 @@ start:
                 ori $t4, $zero, 0
                 case0flickerloop2:
                     ori $t3, $zero, 0
-                    sw $t3, 0xC60($26)
+                    sw $t3, 0xC62($26)
                     addi $t4, $t4, 1
                     bne $t4, $27, case0flickerloop2
                 addi $t5, $t5, 1
@@ -74,7 +75,6 @@ start:
             jal sleep
             j caseloop
         case0sum:
-            sw $zero, 0xC62($26)
             sw $t1, 0xC60($26)
             srl $t1, $t1, 8
             sw $t1, 0xC62($26)
@@ -85,7 +85,7 @@ start:
         jal sleep
         case1loop:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case1loop
         andi $t6, $t6, 0xFF
@@ -135,16 +135,19 @@ start:
             sw $ra, 4($sp)
             sw $a0, 0($sp)
             ori $t2, $zero, 0
-            ori $t4, $zero, 60
+            ori $t4, $zero, 400
             case2showo:
                 ori $t3, $zero, 0
                 case2showi:
                     sw $a0, 0xC60($26)
+                    srl $t7, $a0, 8
+                    sw $t7, 0xC62($26)
                     addi $t3, $t3, 1
                     bne $t3, $27, case2showi
                 addi $t2, $t2, 1
                 bne $t2, $t4, case2showo
             bne $a0, $zero, case2label
+            
             addiu $v0, $v0, 0
             addi $sp, $sp, 8
             jr $ra
@@ -155,8 +158,6 @@ start:
             lw $ra, 4($sp)
             addi $sp, $sp, 8
             addu $v0, $a0, $v0
-            ori $t2, $zero, 0
-            ori $t4, $zero, 60
             jr $ra
         case2exit:
             jal sleep
@@ -191,11 +192,13 @@ start:
             addi $sp, $sp, 8
             addu $v0, $a0, $v0
             ori $t2, $zero, 0
-            ori $t4, $zero, 600
+            ori $t4, $zero, 400
             case3showo:
                 ori $t3, $zero, 0
                 case3showi:
                     sw $a0, 0xC60($26)
+                    srl $t7, $a0, 8
+                    sw $t7, 0xC62($26)
                     addi $t3, $t3, 1
                     bne $t3, $27, case3showi
                 addi $t2, $t2, 1
@@ -210,13 +213,13 @@ start:
         jal sleep
         case4loopa:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case4loopa
         jal sleep
         case4loopb:
             lw $t7, 0xC72($26)
-            sw $t7, 0xC62($26)
+            sw $t7, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case4loopb
         ori $t5, $zero, 0
@@ -238,13 +241,13 @@ start:
         jal sleep
         case5loopa:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case5loopa
         jal sleep
         case5loopb:
             lw $t7, 0xC72($26)
-            sw $t7, 0xC62($26)
+            sw $t7, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case5loopb
         ori $t5, $zero, 0
@@ -266,13 +269,13 @@ start:
         jal sleep
         case6loopa:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case6loopa
         jal sleep
         case6loopb:
             lw $t7, 0xC72($26)
-            sw $t7, 0xC62($26)
+            sw $t7, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case6loopb
         mult $t6, $t7
@@ -287,13 +290,13 @@ start:
         jal sleep
         case7loopa:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case7loopa
         jal sleep
         case7loopb:
             lw $t7, 0xC72($26)
-            sw $t7, 0xC62($26)
+            sw $t7, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case7loopb
         sw $zero, 0xC62($26)
@@ -302,6 +305,8 @@ start:
         mflo $t6
         mfhi $t7
         ori $t3, $zero, 1000
+        ori $t4, $zero, 4
+        ori $t5, $zero, 0
         case7show:
             ori $t1, $zero, 0
             case7showquotiento:
@@ -321,8 +326,8 @@ start:
                     bne $t2, $27, case7showremainderi
                 addi $t1, $t1, 1
                 bne $t1, $t3, case7showremaindero
-            lw $t0, 0xC73($26)
-            beq $t0, $s0, case7show
+            addi $t5, $t5, 1
+            bne $t5, $t4, case7show
         sw $zero, 0xC60($26)
         jal sleep
         j caseloop

@@ -3,7 +3,7 @@
 start:
     lui $26, 0xFFFF
     ori $26, $26, 0xF000
-    ori $27, $zero, 32767
+    ori $27, $zero, 10000
     ori $s0, $zero, 0
     ori $s1, $zero, 1
     ori $s2, $zero, 2
@@ -19,6 +19,7 @@ start:
         lw $t0, 0xC73($26)
         beq $t0, $s0, caseloop
         sw $zero, 0xC60($26)
+        sw $zero, 0xC62($26)
 
         beq $t1, $s0, case0
 		beq $t1, $s1, case1
@@ -28,12 +29,13 @@ start:
 		beq $t1, $s5, case5
 		beq $t1, $s6, case6
 		beq $t1, $s7, case7
+        j caseloop
 
     case0:
         jal sleep
         case0loop:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case0loop
         case0continue:
@@ -43,7 +45,7 @@ start:
             jal sleep
             j caseloop
         case0power:
-            sw $s1, 0xC60($26)
+            sw $s1, 0xC62($26)
             jal sleep
             j caseloop
 
@@ -51,7 +53,7 @@ start:
         jal sleep
         case1loop:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case1loop
         case1continue:
@@ -60,7 +62,7 @@ start:
             jal sleep
             j caseloop
         case1odd:
-            sw $s1, 0xC60($26)
+            sw $s1, 0xC62($26)
             jal sleep
             j caseloop
 
@@ -78,6 +80,7 @@ start:
             lw $t0, 0xC73($26)
             beq $t0, $s0, case2loopb
         or $t3, $t6, $t7
+        sw $zero, 0xC62($26)
         sw $t3, 0xC60($26)
         jal sleep
         j caseloop
@@ -96,6 +99,7 @@ start:
             lw $t0, 0xC73($26)
             beq $t0, $s0, case3loopb
         nor $t3, $t6, $t7
+        sw $zero, 0xC62($26)
         sw $t3, 0xC60($26)
         jal sleep
         j caseloop
@@ -114,6 +118,7 @@ start:
             lw $t0, 0xC73($26)
             beq $t0, $s0, case4loopb
         xor $t3, $t6, $t7
+        sw $zero, 0xC62($26)
         sw $t3, 0xC60($26)
         jal sleep
         j caseloop
@@ -132,6 +137,7 @@ start:
             lw $t0, 0xC73($26)
             beq $t0, $s0, case5loopb
         slt $t3, $t6, $t7
+        sw $zero, 0xC62($26)
         sw $t3, 0xC60($26)
         jal sleep
         j caseloop
@@ -150,6 +156,7 @@ start:
             lw $t0, 0xC73($26)
             beq $t0, $s0, case6loopb
         sltu $t3, $t6, $t7
+        sw $zero, 0xC62($26)
         sw $t3, 0xC60($26)
         jal sleep
         j caseloop
@@ -158,16 +165,17 @@ start:
         jal sleep
         case7loopa:
             lw $t6, 0xC72($26)
-            sw $t6, 0xC62($26)
+            sw $t6, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case7loopa
         jal sleep
         case7loopb:
             lw $t7, 0xC72($26)
-            sw $t7, 0xC62($26)
+            sw $t7, 0xC60($26)
             lw $t0, 0xC73($26)
             beq $t0, $s0, case7loopb
         jal sleep
+        sw $zero, 0xC62($26)
         j caseloop
 
     sleep:
