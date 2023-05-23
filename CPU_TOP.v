@@ -156,8 +156,8 @@ module CPU_TOP(
         .clock(cpu_clk),
         .reset(not_uart_rst),
         .opcplus4(PC_plus_4),
-        .hi(hi_fromALU),
-        .lo(lo_fromALU)
+        .hi_from_ALU(hi_fromALU),
+        .lo_from_ALU(lo_fromALU)
     );
 
 

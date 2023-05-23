@@ -7,8 +7,8 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
     input [31:0] Instruction;
     input [31:0] mem_data;
     input [31:0] ALU_result;
-    input [31:0] hi;
-    input [31:0] lo;
+    input [31:0] hi_from_ALU;
+    input [31:0] lo_from_ALU;
     input RegWrite, MemtoReg, Jal, RegDst;
     input [31:0] opcplus4;
 
@@ -21,6 +21,12 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
     wire R_format = (Instruction[31:26] == 6'b0) ? 1 : 0;
     wire J_format = (Instruction[5:0] == 6'b000010 || Instruction[5:0] == 6'b000011) ? 1 : 0;
     wire I_format = (!R_format && !J_format) ? 1 : 0;
+
+    reg[31:0] lo;
+    reg[31:0] hi;
+    wire hi_lo_calculate = (Instruction[31:26] == 6'b000000 && (Instruction[5:0] == 6'b011001 || Instruction[5:0] == 6'b011011));
+    wire mflo = (Instruction[31:26] == 6'b000000 && Instruction[5:0] == 6'b010010)? 1'b1: 1'b0;
+    wire mfhi = (Instruction[31:26] == 6'b000000 && Instruction[5:0] == 6'b010000)? 1'b1: 1'b0;
 
     wire[4:0] rs = Instruction[25:21];
     wire[4:0] rt = Instruction[20:16];
@@ -37,9 +43,9 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
     integer i;
     always @(posedge clock) begin
         if (reset) begin
-          for (i = 0;i < 32;i = i + 1) begin
-            registers[i] <= 32'b0;
-          end
+            for (i = 0;i < 32;i = i + 1) registers[i] <= 32'b0;
+            hi <= 32'b0;
+            lo <= 32'b0;
         end
         else begin
             if (RegWrite && writeReg) begin
@@ -53,6 +59,12 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
                     registers[writeReg] <= ALU_result;
                 end
             end
+            if (hi_lo_calculate) begin
+                hi <= hi_from_ALU;
+                lo <= lo_from_ALU;
+            end
+            if (mfhi && rd) registers[rd] <= hi;
+            if (mflo && rd) registers[rd] <= lo;
         end
     end
 
