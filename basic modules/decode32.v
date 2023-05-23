@@ -1,11 +1,14 @@
 `timescale 1ns / 1ps
 
-module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal, RegWrite, MemtoReg, RegDst, Sign_extend, clock, reset, opcplus4);
+module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal,
+    RegWrite, MemtoReg, RegDst, Sign_extend, clock, reset, opcplus4, hi, lo);
 
     input clock, reset;
     input [31:0] Instruction;
     input [31:0] mem_data;
     input [31:0] ALU_result;
+    input [31:0] hi;
+    input [31:0] lo;
     input RegWrite, MemtoReg, Jal, RegDst;
     input [31:0] opcplus4;
 

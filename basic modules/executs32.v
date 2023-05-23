@@ -66,7 +66,7 @@ module executs32(
     end
 
     always @(*) begin
-        if (Opcode == 6'b000000) begin
+        if (Exe_opcode == 6'b000000) begin
             case (Function_opcode)
                 6'b01_1000: {hi, lo} = $signed(Ainput) * $signed(Binput); // mult
                 6'b01_1001: {hi, lo} = Ainput * Binput; // multu
