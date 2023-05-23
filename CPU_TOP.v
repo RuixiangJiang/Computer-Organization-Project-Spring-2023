@@ -137,8 +137,9 @@ module CPU_TOP(
     );
 
 
-
-
+    //CPU ALU
+    wire[31:0] hi_fromALU;
+    wire[31:0] lo_fromALU;
 
 
     //CPU Decoder
@@ -189,9 +190,6 @@ module CPU_TOP(
 
 
 
-    //CPU ALU
-    wire[31:0] hi_fromALU;
-    wire[31:0] lo_fromALU;
     executs32 alu_instance(
         .Read_data_1(read_data_1),
         .Read_data_2(read_data_2),
@@ -271,7 +269,7 @@ module CPU_TOP(
         .ledout(Lights)
     );
 
-    wire[23:0] num_seg = {16'b0,Lights[7:0]};
+    wire[23:0] num_seg = {8'b0,Lights[15:0]};
 
     segDriver seg_instance(
         .clk(clock),
