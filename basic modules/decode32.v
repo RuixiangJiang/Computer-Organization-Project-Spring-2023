@@ -24,7 +24,11 @@ module decode32(read_data_1, read_data_2, Instruction, mem_data, ALU_result, Jal
 
     reg[31:0] lo;
     reg[31:0] hi;
-    wire hi_lo_calculate = (Instruction[31:26] == 6'b000000 && (Instruction[5:0] == 6'b011001 || Instruction[5:0] == 6'b011011));
+    wire hi_lo_calculate = Instruction[31:26] == 6'b000000 &&
+        (Instruction[5:0] == 6'b011000 ||
+         Instruction[5:0] == 6'b011001 ||
+         Instruction[5:0] == 6'b011010 ||
+         Instruction[5:0] == 6'b011011);
     wire mflo = (Instruction[31:26] == 6'b000000 && Instruction[5:0] == 6'b010010)? 1'b1: 1'b0;
     wire mfhi = (Instruction[31:26] == 6'b000000 && Instruction[5:0] == 6'b010000)? 1'b1: 1'b0;
 
