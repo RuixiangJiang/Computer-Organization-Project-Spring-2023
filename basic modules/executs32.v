@@ -14,7 +14,9 @@ module executs32(
     output Zero, // if the ALU_Result is zero
     output reg[31:0] regALU_Result, // the ALU calculation result
     output[31:0] Addr_Result, // the calculated instruction address
-    input[31:0] PC_plus_4 // program counter AFTER adding 4
+    input[31:0] PC_plus_4, // program counter AFTER adding 4
+    output reg[31:0] hi,
+    output reg[31:0] lo
 );
     wire[31:0] Ainput, Binput; // two operands for calculation
     wire[5:0] execode; // to solve ALUcontrol
@@ -61,6 +63,25 @@ module executs32(
             default: shiftResult = Binput;
         endcase
         else shiftResult = Binput;
+    end
+
+    always @(*) begin
+        if (Opcode == 6'b000000) begin
+            case (Function_opcode)
+                6'b01_1000: {hi, lo} = $signed(Ainput) * $signed(Binput); // mult
+                6'b01_1001: {hi, lo} = Ainput * Binput; // multu
+                6'b01_1010: begin
+                    lo = $signed(Ainput) / $signed(Binput);
+                    hi = $signed(Ainput) % $signed(Binput);
+                end
+                6'b01_1011: begin
+                    lo = Ainput / Binput;
+                    hi = Ainput % Binput;
+                end
+                default: {hi, lo} = 64'b0;
+            endcase
+        end
+        else {hi, lo} = 64'b0;
     end
 
     always @(*) begin
