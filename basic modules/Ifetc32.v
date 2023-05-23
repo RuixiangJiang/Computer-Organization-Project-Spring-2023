@@ -45,13 +45,13 @@ module Ifetc32(
         else begin
             if (Jmp==1'b1 || Jal==1'b1) begin
                 link_addr <= nextPC;
-                PC <= {PC[31:28], Instruction[25:0], 2'b00};
+                PC <= {PC[31:28], Instruction[25:0], 2'b00}; // jump to the address in instruction[25:0]
             end
             else PC <= nextPC;
         end
     end
 
-    wire no_Uart_mode = upg_rst_i | (~upg_rst_i & upg_done_i);
+    wire no_Uart_mode = upg_rst_i | (~upg_rst_i & upg_done_i); // judge whether uart mode
     
     prgrom instmem(
         .clka(no_Uart_mode? clock: upg_clk_i),
@@ -59,6 +59,6 @@ module Ifetc32(
         .addra(no_Uart_mode? rom_adr_i: upg_adr_i),
         .dina(no_Uart_mode? 32'h00000000: upg_dat_i),
         .douta(Instruction) 
-    );
+    ); // program memory
 
 endmodule

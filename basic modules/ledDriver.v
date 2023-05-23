@@ -9,6 +9,7 @@ module ledDriver(
     input[7:0] ledinputdata,
     output reg[15:0] ledout
 );
+// driver of the led
     always @(posedge ledclk or posedge ledrst) begin
         if (ledrst) ledout <= 16'h0;
         else if (ledcs && ledwrite) begin

@@ -16,48 +16,34 @@ module CPU_TOP(
 
     //clk
     wire cpu_clk;
-
     wire[31:0] instruction;
-
     wire[31:0] branch_base_addr;
     wire[31:0] addr_result;
     wire[31:0] addr_out;
-
     wire[31:0] read_data_1;
     wire[31:0] read_data_2;
-
     wire Branch,nBranch,Jmp,Jal,Jr,Zero;
-
-
     wire[7:0] io_rdata;
     wire[15:0] io_wdata;
-
     wire[31:0] mem_data;
     wire[31:0] alu_result;
     wire RegWrite,MemtoReg,RegDst;
     wire[31:0] sign_extend;
-
     wire[5:0] opcode;
     assign opcode = instruction[31:26];
     wire[5:0] function_opcode;
     assign function_opcode = instruction[5:0];
-
     wire ALUSrc,Sftmd;
     wire I_format;
     wire[1:0] ALUop;
     wire[21:0] alu_resultHigh;
     assign alu_resultHigh = alu_result[31:10];
     wire memRead,memWrite,ioRead,ioWrite;
-
-
     wire[5:0] shamt;
     assign shamt = instruction[10:6];
-
     wire[31:0] PC_plus_4;
-
     wire[31:0] writeData;
     wire[31:0] readData;
-
     wire SwitchCtrl;
     wire LEDCtrl;
     wire UartCtrl;
@@ -95,7 +81,6 @@ module CPU_TOP(
         .clk_out2(upgclk)
     );
 
-
     wire[31:0] PC;
     // programrom rom(
     //     .rom_clk_i(cpu_clk),
@@ -108,8 +93,6 @@ module CPU_TOP(
     //     .upg_dat_i(upg_dat_o),
     //     .upg_done_i(upg_done_o)
     // );
-
-
 
     //Instruction Fetch
     Ifetc32 if_instance(
@@ -136,11 +119,9 @@ module CPU_TOP(
         .upg_done_i(upg_done_o)
     );
 
-
     //CPU ALU
     wire[31:0] hi_fromALU;
     wire[31:0] lo_fromALU;
-
 
     //CPU Decoder
     decode32 decode_instance(
@@ -160,10 +141,6 @@ module CPU_TOP(
         .hi_from_ALU(hi_fromALU),
         .lo_from_ALU(lo_fromALU)
     );
-
-
-
-
 
     //CPU Controller
     control32 control_instance(
@@ -188,8 +165,7 @@ module CPU_TOP(
         .IOWrite(ioWrite)
     );
 
-
-
+    // CPU ALU
     executs32 alu_instance(
         .Read_data_1(read_data_1),
         .Read_data_2(read_data_2),
@@ -210,8 +186,7 @@ module CPU_TOP(
         .lo(lo_fromALU)
     );
 
-
-
+    // dmemory
     dmemory32 dm_instance(
         .ram_clk_i(cpu_clk),
         .ram_wen_i(memWrite),
@@ -229,11 +204,10 @@ module CPU_TOP(
     wire[31:0] addr_in;
     assign addr_in = alu_result;
 
-
     MemOrIO morio_instance(
         .mRead(memRead),
-        .mWrite(memWrite),//memWrite
-        .ioRead(ioRead),//ioRead
+        .mWrite(memWrite), // memWrite
+        .ioRead(ioRead), // ioRead
         .ioWrite(ioWrite),
         .addr_in(addr_in),
         .addr_out(addr_out),
@@ -246,7 +220,6 @@ module CPU_TOP(
         .LEDCtrl(LEDCtrl)
     );
 
-
     Switch switch(
         .switclk(cpu_clk),
         .switrst(rst),
@@ -257,7 +230,6 @@ module CPU_TOP(
         .switch_rdata(Switches),
         .check_button(check_button)
     );
-
 
     ledDriver led(
         .ledclk(cpu_clk),
@@ -280,6 +252,5 @@ module CPU_TOP(
         .seg1(seg1),
         .an(an)
     );
-
 
 endmodule

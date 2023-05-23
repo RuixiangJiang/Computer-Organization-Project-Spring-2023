@@ -10,6 +10,7 @@ module Switch(
     input[15:0] switch_rdata, // 16 bit data read from ego1
     input check_button
 );
+// driver of the switch
     always @ (negedge switclk or posedge switrst) begin
         if(switrst) switch_wdata <= 0;
 		else if (switcs && switread) begin

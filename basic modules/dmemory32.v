@@ -19,6 +19,7 @@ module dmemory32(ram_clk_i, ram_wen_i, ram_adr_i, ram_dat_i, ram_dat_o,
 
     wire kickOff = upg_rst_i | (~upg_rst_i & upg_done_i);
 
+    // ram
     RAM ram(
         .clka (kickOff? ram_clk:upg_clk_i),
         .wea (kickOff? ram_wen_i:upg_wen_i),

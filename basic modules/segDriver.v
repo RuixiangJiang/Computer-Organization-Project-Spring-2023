@@ -8,14 +8,12 @@ module segDriver(
     output reg[7:0] seg1,
     output reg[7:0] an
 );
+// driver of the segtube
     parameter maxcnt = 50000;
     reg[29:0] cntclk_cnt = 0;
     reg cntclk = 0;
     parameter maxclk = 30'd50000000;
    
-    
-    
-    
     reg[18:0] divclk_cnt = 0;
     reg divclk = 0;
     reg[3:0] disp_dat = 0;

@@ -26,15 +26,16 @@ Jmp, Jal, I_format, Sftmd, ALUOp, Alu_resultHigh, IORead, IOWrite);
     wire lw, sw, beq, bne;
     wire R_format;
 
-    assign R_format = (Opcode == 6'b000000) ? 1'b1 : 1'b0;
-    assign lw = (Opcode == 6'b100011) ? 1'b1 : 1'b0;
-    assign sw = (Opcode == 6'b101011) ? 1'b1 : 1'b0;
-    assign beq = (Opcode == 6'b000100) ? 1'b1 : 1'b0;
-    assign bne = (Opcode == 6'b000101) ? 1'b1 : 1'b0;
-    assign Jmp = (Opcode == 6'b000010) ? 1'b1 : 1'b0;
-    assign Jal = (Opcode == 6'b000011) ? 1'b1 : 1'b0;
-    assign Jr = (R_format && (Function_opcode == 6'b001000)) ? 1'b1 : 1'b0;
+    assign R_format = (Opcode == 6'b000000) ? 1'b1 : 1'b0; // 6'b000000 is the opcode of R-type instructions
+    assign lw = (Opcode == 6'b100011) ? 1'b1 : 1'b0; // 6'b100011 is the opcode of lw
+    assign sw = (Opcode == 6'b101011) ? 1'b1 : 1'b0; // 6'b101011 is the opcode of sw
+    assign beq = (Opcode == 6'b000100) ? 1'b1 : 1'b0; // 6'b000100 is the opcode of beq
+    assign bne = (Opcode == 6'b000101) ? 1'b1 : 1'b0; // 6'b000101 is the opcode of bne
+    assign Jmp = (Opcode == 6'b000010) ? 1'b1 : 1'b0; // 6'b000010 is the opcode of j
+    assign Jal = (Opcode == 6'b000011) ? 1'b1 : 1'b0; // 6'b000011 is the opcode of jal
+    assign Jr = (R_format && (Function_opcode == 6'b001000)) ? 1'b1 : 1'b0; // 6'b001000 is the function opcode of jr
 
+    // judge control signals
     assign Branch = beq;
     assign nBranch = bne;
     assign RegDST = R_format;

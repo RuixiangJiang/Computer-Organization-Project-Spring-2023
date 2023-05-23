@@ -15,15 +15,15 @@ module MemOrIO( mRead, mWrite, ioRead, ioWrite,addr_in, addr_out, m_rdata, io_rd
     output [31:0] r_wdata; // data to Decoder(register file)
 
     input[31:0] r_rdata; // data read from Decoder(register file)
-    output reg[31:0] write_data; // data to memory or I/O锟斤拷m_wdata, io_wdata锟斤拷output LEDCtrl; // LED Chip Select
+    output reg[31:0] write_data; // data to memory or I/O
     output  SwitchCtrl; // Switch Chip Select
     output LEDCtrl;
 
     assign addr_out= addr_in;
-    // The data wirte to register file may be from memory or io. // While the data is from io, it should be the lower 16bit of r_wdata. assign r_wdata = 锟斤拷锟斤拷锟斤拷
+    // The data wirte to register file may be from memory or io.
     // Chip select signal of Led and Switch are all active high;
 
-    assign r_wdata = (mRead == 1)? m_rdata:{{24{io_rdata[7]}},io_rdata}; // TODO
+    assign r_wdata = (mRead == 1)? m_rdata:{{24{io_rdata[7]}},io_rdata};
 
     assign SwitchCtrl = ioRead;
     assign LEDCtrl = ioWrite;
