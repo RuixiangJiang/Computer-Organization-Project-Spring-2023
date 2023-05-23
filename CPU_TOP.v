@@ -188,6 +188,8 @@ module CPU_TOP(
 
 
     //CPU ALU
+    wire[31:0] hi_fromALU;
+    wire[31:0] lo_fromALU;
     executs32 alu_instance(
         .Read_data_1(read_data_1),
         .Read_data_2(read_data_2),
@@ -203,7 +205,9 @@ module CPU_TOP(
         .Zero(Zero),
         .regALU_Result(alu_result),
         .Addr_Result(addr_result),
-        .PC_plus_4(branch_base_addr)
+        .PC_plus_4(branch_base_addr),
+        .hi(hi_fromALU),
+        .lo(lo_fromALU)
     );
 
 
