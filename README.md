@@ -88,5 +88,13 @@
             | Simulation | Unit | Test the $5$ basic modules on OJ | Accepted |
             | Synthesis  | Module | Test whether the modules are sussessfully mixed | Acepted |
         -   Test for mips
+            |              Detail              |  Result  |
+            | :------------------------------: | :------: |
+            | Test flow lights | Accepted |
+            | Test single R-type instructions | Accepted |
+            | Test single I-type instructions | Accepted |
+            | Test single J-type instructions | Accepted |
+            | Test scene 1 | Accepted |
+            | Test scene 2 | Accepted |
         
     ## Issues and summary
