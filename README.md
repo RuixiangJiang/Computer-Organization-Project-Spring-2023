@@ -10,6 +10,8 @@
     
         -   v$1.0$(05-14): Basic modules completed
         -   v$1.1$(05-20): Top module completed
+        -   v$1.2$(05-21): Uart completed
+        -   v$1.3$(05-23): asm part completed
     
         ## CPU architecture design specification
     
@@ -42,7 +44,7 @@
                     The instruction fetch stage involves retrieving the instruction from the memory. The program counter (PC) is responsible for providing the memory address of the current instruction. This address is sent to the instruction memory, which fetches the instruction stored at that address and transfers it to the instruction register (IR). Additionally, the program counter is incremented to point to the subsequent instruction in memory.
                     (add pictures)
                 -   Instruction Decode
-                    During the instruction decode stage, the received instruction is analyzed and decoded. The control unit examines the opcode of the instruction and determines the required control signals for subsequent stages. By interpreting the opcode, the control unit configures the CPU components accordingly, enabling the appropriate data paths and control signals necessary for executing the instruction.
+                    he 8nned36rew54the instruction decode stage, the received instruction is analyzed and decoded. The control unit examines the opcode of the instruction and determines the required control signals for subsequent stages. By interpreting the opcode, the control unit configures the CPU components accordingly, enabling the appropriate data paths and control signals necessary for executing the instruction.
                     (add pictures)
                 -   ALU
                     The ALU carries out arithmetic and logical operations on the data within the CPU. Depending on the specific instruction, the ALU performs operations such as addition, subtraction, logical AND, logical OR, or other specified computations. The ALU takes inputs from the general-purpose registers and applies the operation indicated by the control signals received from the control unit.
@@ -84,6 +86,7 @@
             |   Method   | Type |              Detail              |  Result  |
             | :--------: | :--: | :------------------------------: | :------: |
             | Simulation | Unit | Test the $5$ basic modules on OJ | Accepted |
+            | Synthesis  | Module | Test whether the modules are sussessfully mixed | Acepted |
         -   Test for mips
         
     ## Issues and summary
