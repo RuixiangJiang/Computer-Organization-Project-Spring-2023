@@ -1,10 +1,10 @@
 -   -   ## Developer's instructions
     
-        |      Name      |    SID     | Contribution ratio |                     Work                      |
-        | :------------: | :--------: | :----------------: | :-------------------------------------------: |
-        | Ruixiang Jiang | $12111611$ |       $33\%$       | ALU, IFetch, CPUTop, Led, Switch, Seg, Report |
-        |  Yujing Zhang  | $12111944$ |       $33\%$       |                                               |
-        |   Yilun Qiu    | $12013006$ |       $33\%$       |                                               |
+        |      Name      |    SID     | Contribution ratio |                        Work                         |
+        | :------------: | :--------: | :----------------: | :-------------------------------------------------: |
+        | Ruixiang Jiang | $12111611$ |       $33\%$       | ALU, IFetch, CPUTop, Led, Switch, Seg, Uart, Report |
+        |  Yujing Zhang  | $12111944$ |       $33\%$       |                                                     |
+        |   Yilun Qiu    | $12013006$ |       $33\%$       |                                                     |
     
         ## Version modification record
     
