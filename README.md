@@ -11,29 +11,43 @@
         -   v$1.0$(05-14): Basic modules completed
         -   v$1.1$(05-20): Top module completed
         -   v$1.2$(05-21): Uart completed
-        -   v$1.3$(05-23): asm part completed
+        -   final version v$1.3$(05-23): Assembly part completed
     
         ## CPU architecture design specification
     
         -   CPU Features
             -   Instruction set architecture
                 Registers: number = $32$, width = $32$
-                Exception handling: 
-                ![](/Users/jrx/课程资料/CS202/Computer-Organization-Project-Spring-2023/ISA.png)
+                Instruction set: Minisys + mult(u) + div(u)
+                ![](isa.png)
+                
             -   Address space design
                 - Architecture: Harvard architecture
                 - Addressing unit: Byte
                 - Instruction space: $0x00000000$ ~ $0xFFFFFFFF$
                 - Data space: $0x00000000$ ~ $0xFFFFFC00$
-            -   External I/O devices: none
+                
+            -   External I/O devices: Accessing I/O using polling
+            
+                |    Device    |   Address    |
+                | :----------: | :----------: |
+                |   Left LED   | $0xFFFFFC62$ |
+                |  Right LED   | $0xFFFFFC60$ |
+                | Left Switch  | $0xFFFFFC72$ |
+                | Right Switch | $0xFFFFFC70$ |
+                | Enter Button | $0xFFFFFC73$ |
+                |   Segment    | $0xFFFFFC80$ |
+            
             -   CPI: single cycle CPU
+            
         -   CPU interface
             -   Clock: Built-in clock interface of EGO1 development board
             -   Reset: R1 of EGO1 development board
-            -   Uart: 
-            -   Switch
-            -   16-bit-width Led
-            -   8-bit-width Seg
+            -   Uart: Use IP core
+            -   Switch: Left switches for input data, and right switches for input instruction
+            -   16-bit-width Led: Output result in a binary number
+            -   8-bit-width Seg: Output arithmetic result with max value = $99999999$
+            
         -   Internal structure of CPU
             -   External interfaces of CPU
             (add pictures)
@@ -76,12 +90,13 @@
                     (add pictures)
                 -   Segment Driver
                     The segment driver is responsible for controlling the segments or tubes used to display numbers or alphanumeric characters. It takes input signals, such as digital data representing the number or character to be displayed, and generates the appropriate signals to activate the specific segments required to form the desired pattern.
-    
+        
                     By controlling the activation and deactivation of the segments, the seg driver module enables the EGO1 board to display numbers or characters on the 7-segment display. It can be programmed or configured to update the display in real-time, showing dynamic information, or to show static values based on the input provided.
                     
                     Special attention should be paid to the value of the clock cycle for the 7-segment display on the EGO1 development board.
                     (add pictures)
         ## Test instructions
+        
         -   Test for vivado
             |   Method   | Type |              Detail              |  Result  |
             | :--------: | :--: | :------------------------------: | :------: |
@@ -98,3 +113,10 @@
             | Test scene 2 | Accepted |
         
     ## Issues and summary
+
+-   Use Github to merge codes written by each one
+
+    ![](github commit.png)
+
+-   Make sure that each module has a right clock signal
+-   Make sure that each operation in sequential logic modules is executed on the correct clock edge, especially when using IP cores.
